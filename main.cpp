@@ -65,7 +65,7 @@ void evaluateChromosome(){
 			fitness[c]=accumulatedPrice/(float)MAX_PRICE;
 		}
 		else{
-			fitness[c]=accumulatedPrice/(float)MAX_PRICE*0.5; 
+			fitness[c]=accumulatedPrice/(float)MAX_PRICE*0.25; 
 		}
 
 		cout << "\tC" << c << "\t" <<accumulatedPrice<<"\t"<< accumulatedTime << "\t" << fitness[c] << endl;
