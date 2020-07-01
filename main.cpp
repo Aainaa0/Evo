@@ -127,6 +127,40 @@ void parentSelection(){
 	}
 }
 
+void crossover(){
+	float prob = 0;
+	int side=0; //token for coin flip. 0 is heads, 1 is tails
+
+	prob = ((rand() % 10)+1) / 10.0;
+
+	if (prob < CO_probability) {
+		for (int g =0; g < GENE; g++)
+		{
+			side=rand()%2;//0 to children 1, 1 to children 2
+			if(side==0){
+				children[0][g] = parents[0][g];
+				children[1][g] = abs(parents[0][g]-1);
+			}
+			else{
+				children[1][g] = parents[1][g];
+				children[0][g] = abs(parents[1][g]-1);
+			}
+		}
+	}
+	else {
+		cout << "\nCrossover did not happen ";
+	}
+
+	for (int c = 0; c < 2; c++)
+	{
+		cout << "\nChildren" << c + 1 << ": ";
+		for (int g = 0; g < GENE; g++)
+		{
+			cout << children[c][g] << " ";
+		}
+	}
+}
+
 int main() {
 	srand(time(NULL));
 	cout << "\nGA START! \n";
@@ -144,5 +178,7 @@ int main() {
 	getchar();
 	cout << "\nPARENT SELECTION \n";
 	parentSelection();
-
+	getchar();
+	cout << "\nCROSSOVER \n";
+	crossover();
 }
