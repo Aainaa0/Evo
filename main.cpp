@@ -161,6 +161,40 @@ void crossover(){
 	}
 }
 
+void mutation(){
+	float prob = 0;
+	int mut_point;
+	prob = (rand() % 11) / 10.0;
+
+	
+		for (int c = 0; c < 2; c++)
+		{
+			if (prob < MUT_probability) {
+				mut_point = rand() % GENE;
+				cout << "\nMutation happened for Children " << c + 1 << " at mutation point " << mut_point;
+				if (children[c][mut_point] == 0){
+					children[c][mut_point] = 1;
+				}
+				else {
+					children[c][mut_point] = 0;
+				}
+			}
+			else {
+				cout << "\nMutation did not happen for Children "<<c+1;
+			}
+		}
+	
+	for (int c = 0; c < 2; c++)
+	{
+		cout << "\nChildren" << c + 1 << ": ";
+		for (int g = 0; g < GENE; g++)
+		{
+			cout << children[c][g] << " ";
+		}
+		cout << endl;
+	}
+}
+
 int main() {
 	srand(time(NULL));
 	cout << "\nGA START! \n";
@@ -181,4 +215,8 @@ int main() {
 	getchar();
 	cout << "\nCROSSOVER \n";
 	crossover();
+	getchar();
+	cout << "\nMUTATION \n";
+	mutation();
+	
 }
