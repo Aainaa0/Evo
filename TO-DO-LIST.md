@@ -1,10 +1,8 @@
 task 1 : INITIALIZE POPULATION (/)
 
-task 2 : EVALUATE CHROMOSOME
-    evaluateChromosome();
-    recordBestFitness();
-    calcAvgFitness();
-task 3 : PARENT SELECTION
+task 2 : EVALUATE CHROMOSOME (/)
+
+task 3 : PARENT SELECTION (/)
 
 task 4 : CROSSOVER
 
