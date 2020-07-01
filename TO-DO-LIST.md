@@ -4,7 +4,7 @@ task 2 : EVALUATE CHROMOSOME (/)
 
 task 3 : PARENT SELECTION (/)
 
-task 4 : CROSSOVER (in progress...)
+task 4 : CROSSOVER (/)
 
 task 5 : MUTATION (in progress...)
 
