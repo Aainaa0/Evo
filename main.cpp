@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include <stdlib.h>
 #include <stdio.h>
 using namespace std;
@@ -61,15 +62,68 @@ void evaluateChromosome(){
 			}
 		}
 
-		if (accumulatedTime<=120){
+		if (accumulatedTime<=MAX_TIME){
 			fitness[c]=accumulatedPrice/(float)MAX_PRICE;
 		}
 		else{
 			fitness[c]=accumulatedPrice/(float)MAX_PRICE*0.25; 
-			//0.25 because with 0.5, over time solution still have better fitness
 		}
 
 		cout << "\tC" << c << "\t" <<accumulatedPrice<<"\t"<< accumulatedTime << "\t" << fitness[c] << endl;
+	}
+}
+
+void parentSelection(){
+	double totalFitness=0;
+	double pointer1=0;
+	double pointer2=0;
+	int indexParents[2];
+	double temp=0;
+	bool p1=0; //parent1 is selected flag
+	bool p2=0; //parent2 is selected flag
+
+	for(int c=0;c<POP_SIZE;c++){
+		totalFitness+=fitness[c];
+	}
+
+	do{
+		do{
+			pointer1=fmod(rand(), totalFitness);
+			pointer2=fmod(rand(), totalFitness);
+		}while(pointer1==pointer2);
+
+		temp=0;
+
+		for(int c=0;c<POP_SIZE;c++){
+			temp+=fitness[c];
+
+			if(p1==1&&p2==1){
+				break;
+			}
+			else{
+				if (temp>pointer1&&p1==0){
+					indexParents[0]=c;
+					p1=1;
+				}
+
+				if(temp>pointer2&&p2==0){
+					indexParents[1]=c;
+					p2=1;
+				}
+			}
+		}
+
+	}while(indexParents[0]==indexParents[1]);
+
+	for (int p = 0; p < 2; p++)
+	{
+		cout << "Parent " << p + 1<<": ";
+		for (int g = 0; g < GENE; g++)
+		{
+			parents[p][g] = chromosome[indexParents[p]][g];
+			cout << " " << parents[p][g];
+		}
+		cout << " Fitness= "<<fitness[indexParents[p]]<<endl;
 	}
 }
 
@@ -87,5 +141,8 @@ int main() {
 	getchar();
 	cout << "\nEVALUATE CHROMOSOME \n";
 	evaluateChromosome();
+	getchar();
+	cout << "\nPARENT SELECTION \n";
+	parentSelection();
 
 }
