@@ -14,7 +14,7 @@ const float CO_probability = 0.9;
 const float MUT_probability = 0.9;
 const int MAX_GENERATION = 10;
 const int MAX_PRICE=278;
-const int MAX_TIME=120;
+const int MAX_TIME=180;
 //declare chromosomes data structure
 int chromosome[POP_SIZE][GENE];
 //declare fitness data structure
@@ -61,12 +61,11 @@ void evaluateChromosome(){
 			}
 		}
 
-		if (accumulatedTime<=120){
+		if (accumulatedTime<=MAX_TIME){
 			fitness[c]=accumulatedPrice/(float)MAX_PRICE;
 		}
 		else{
-			fitness[c]=accumulatedPrice/(float)MAX_PRICE*0.25; 
-			//0.25 because with 0.5, over time solution still have better fitness
+			fitness[c]=accumulatedPrice/(float)MAX_PRICE*0.5; 
 		}
 
 		cout << "\tC" << c << "\t" <<accumulatedPrice<<"\t"<< accumulatedTime << "\t" << fitness[c] << endl;
@@ -85,14 +84,14 @@ void parentSelection(){
 	for(int c=0;c<POP_SIZE;c++){
 		totalFitness+=fitness[c];
 	}
-	cout<<"Calculated total Fitness\n";
+
 	do{
 		do{
 			pointer1=fmod(rand(), totalFitness);
 			pointer2=fmod(rand(), totalFitness);
 		}while(pointer1==pointer2);
 
-		cout<<"Done Pointer Selection\n";
+		temp=0;
 
 		for(int c=0;c<POP_SIZE;c++){
 			temp+=fitness[c];
@@ -112,8 +111,6 @@ void parentSelection(){
 				}
 			}
 		}
-
-		cout<<"Done Parent Selection\n";
 
 	}while(indexParents[0]==indexParents[1]);
 
