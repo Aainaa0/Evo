@@ -14,7 +14,7 @@ const float CO_probability = 0.9;
 const float MUT_probability = 0.9;
 const int MAX_GENERATION = 10;
 const int MAX_PRICE=278;
-const int MAX_TIME=180;
+const int MAX_TIME=120;
 //declare chromosomes data structure
 int chromosome[POP_SIZE][GENE];
 //declare fitness data structure
