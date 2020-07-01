@@ -16,13 +16,16 @@ const float MUT_probability = 0.9;
 const int MAX_GENERATION = 10;
 const int MAX_PRICE=278;
 const int MAX_TIME=120;
+const double PENALTY_MULTIPLIER=0.25;
 //declare chromosomes data structure
 int chromosome[POP_SIZE][GENE];
 //declare fitness data structure
 double fitness[POP_SIZE];
-
 int parents[2][GENE];
 int children[2][GENE];
+//declare new data structure to hold new chromosomes
+int newChromosomes[POP_SIZE][GENE];
+int newChromosomesCounter = 0;
 
 void initializePopulation() {
 	int randNum;
@@ -66,7 +69,7 @@ void evaluateChromosome(){
 			fitness[c]=accumulatedPrice/(float)MAX_PRICE;
 		}
 		else{
-			fitness[c]=accumulatedPrice/(float)MAX_PRICE*0.25; 
+			fitness[c]=accumulatedPrice/(float)MAX_PRICE*PENALTY_MULTIPLIER; 
 		}
 
 		cout << "\tC" << c << "\t" <<accumulatedPrice<<"\t"<< accumulatedTime << "\t" << fitness[c] << endl;
@@ -91,8 +94,6 @@ void parentSelection(){
 			pointer1=fmod(rand(), totalFitness);
 			pointer2=fmod(rand(), totalFitness);
 		}while(pointer1==pointer2);
-
-		temp=0;
 
 		for(int c=0;c<POP_SIZE;c++){
 			temp+=fitness[c];
@@ -161,6 +162,127 @@ void crossover(){
 	}
 }
 
+void mutation(){
+	float prob = 0;
+	int mut_point;
+	prob = (rand() % 11) / 10.0;
+
+	
+		for (int c = 0; c < 2; c++)
+		{
+			if (prob < MUT_probability) {
+				mut_point = rand() % GENE;
+				cout << "\nMutation happened for Children " << c + 1 << " at mutation point " << mut_point;
+				if (children[c][mut_point] == 0){
+					children[c][mut_point] = 1;
+				}
+				else {
+					children[c][mut_point] = 0;
+				}
+			}
+			else {
+				cout << "\nMutation did not happen for Children "<<c+1;
+			}
+		}
+	
+	for (int c = 0; c < 2; c++)
+	{
+		cout << "\nChildren" << c + 1 << ": ";
+		for (int g = 0; g < GENE; g++)
+		{
+			cout << children[c][g] << " ";
+		}
+		cout << endl;
+	}
+}
+
+void survivalSelection(){
+	int candidates[4][GENE];
+	int j=0;
+
+	for(int i=0;i<4;i++){
+		if(i<2){
+			for(int g=0;g<GENE;g++)
+			{
+				candidates[i][g]=parents[i][g];
+			}
+		}
+		else{
+			for(int g=0;g<GENE;g++)
+			{
+				candidates[i][g]=children[j][g];
+			}
+			j++;
+		}
+	}
+
+	int accumulatedTime=0;
+	int accumulatedPrice=0;
+	float tempFitness[4];
+	float tempBestFitness=0;
+	int bestCandidateIndex[2];
+	int worstChromosomeIndex[2];
+	float tempWorstFitness=100;
+
+	for (int c=0;c<4;c++){
+		accumulatedTime=0;
+		accumulatedPrice=0;
+
+		for(int i=0;i<GENE;i++){
+			if (candidates[c][i]==1){
+				accumulatedTime+=TIME[i];
+				accumulatedPrice+=PRICE[i];
+			}
+		}
+
+		if (accumulatedTime<=MAX_TIME){
+			tempFitness[c]=accumulatedPrice/(float)MAX_PRICE;
+		}
+		else{
+			tempFitness[c]=accumulatedPrice/(float)MAX_PRICE*PENALTY_MULTIPLIER; 
+		}		
+	}
+
+	for(int c=0;c<4;c++){
+		if(tempFitness[c]>=tempBestFitness){
+			tempBestFitness=tempFitness[c];
+			bestCandidateIndex[0]=c;
+		}
+	}
+	
+	tempBestFitness=0;
+
+	for(int c=0;c<4;c++){
+		if(tempFitness[c]>=tempBestFitness&&c!=bestCandidateIndex[0]){
+			tempBestFitness=tempFitness[c];
+			bestCandidateIndex[1]=c;
+		}
+	}
+
+	for(int c=0;c<POP_SIZE;c++){
+		if(fitness[c]<=tempWorstFitness){
+			tempWorstFitness=fitness[c];
+			worstChromosomeIndex[0]=c;
+		}
+	}	
+
+	tempWorstFitness=100;
+
+	for(int c=0;c<POP_SIZE;c++){
+		if(fitness[c]<=tempWorstFitness&&c!=worstChromosomeIndex[0]){
+			tempWorstFitness=fitness[c];
+			worstChromosomeIndex[1]=c;
+		}
+	}
+
+	for(int i=0;i<2;i++){
+		for(int g=0;g<GENE;g++){
+			chromosome[worstChromosomeIndex[i]][g]=candidates[bestCandidateIndex[i]][g];
+		}
+		cout<<"Replaced chromosome "<<worstChromosomeIndex[i]<<" with candidate "<<bestCandidateIndex[i]<<endl;
+	}	
+}
+
 int main() {
 	srand(time(NULL));
 	cout << "\nGA START! \n";
@@ -181,4 +303,13 @@ int main() {
 	getchar();
 	cout << "\nCROSSOVER \n";
 	crossover();
+	getchar();
+	cout << "\nMUTATION \n";
+	mutation();
+	getchar();
+	cout << "\nSURVIVAL SELECTION\n";
+	survivalSelection();
+	printChromosome();
 }
+
+
