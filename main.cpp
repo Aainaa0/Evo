@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime>
-#include<cmath>
 #include <stdlib.h>
+#include <stdio.h>
 using namespace std;
 
 //declare constant - problem specification, population size
@@ -73,62 +73,6 @@ void evaluateChromosome(){
 	}
 }
 
-void parentSelection(){
-	double totalFitness=0;
-	double pointer1=0;
-	double pointer2=0;
-	int indexParents[2];
-	double temp=0;
-	bool p1=0; //parent1 is selected flag
-	bool p2=0; //parent2 is selected flag
-
-	for(int c=0;c<POP_SIZE;c++){
-		totalFitness+=fitness[c];
-	}
-	cout<<"Calculated total Fitness\n";
-	do{
-		do{
-			pointer1=fmod(rand(), totalFitness);
-			pointer2=fmod(rand(), totalFitness);
-		}while(pointer1==pointer2);
-
-		cout<<"Done Pointer Selection\n";
-
-		for(int c=0;c<POP_SIZE;c++){
-			temp+=fitness[c];
-
-			if(p1==1&&p2==1){
-				break;
-			}
-			else{
-				if (temp>pointer1&&p1==0){
-					indexParents[0]=c;
-					p1=1;
-				}
-
-				if(temp>pointer2&&p2==0){
-					indexParents[1]=c;
-					p2=1;
-				}
-			}
-		}
-
-		cout<<"Done Parent Selection\n";
-
-	}while(indexParents[0]==indexParents[1]);
-
-	for (int p = 0; p < 2; p++)
-	{
-		cout << "Parent " << p + 1<<": ";
-		for (int g = 0; g < GENE; g++)
-		{
-			parents[p][g] = chromosome[indexParents[p]][g];
-			cout << " " << parents[p][g];
-		}
-		cout << " Fitness= "<<fitness[indexParents[p]]<<endl;
-	}
-}
-
 int main() {
 	srand(time(NULL));
 	cout << "\nGA START! \n";
@@ -143,8 +87,5 @@ int main() {
 	getchar();
 	cout << "\nEVALUATE CHROMOSOME \n";
 	evaluateChromosome();
-	getchar();
-	cout << "\nPARENT SELECTION \n";
-	parentSelection();
-	getchar();
+
 }
