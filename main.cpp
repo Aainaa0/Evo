@@ -8,7 +8,7 @@ using namespace std;
 
 //declare constant - problem specification, population size
 const int GENE = 30;
-const int POP_SIZE = 50;   //temporary
+const int POP_SIZE = 10;   //temporary
 const int PRICE[GENE] = { 8, 5, 6, 4, 13, 12, 5, 17, 10, 15, 9, 4, 6, 18, 8, 7, 7, 8, 8, 2, 9, 10, 10, 13, 7, 11, 12, 6, 21, 7 };
 const int TIME[GENE] = { 12, 11, 13, 9, 14, 14, 12, 20, 6, 21, 13, 9, 11, 15, 11, 9, 6, 7, 14, 6, 13, 8, 13, 16, 10, 10, 11, 10, 20, 10 };
 const float CO_probability = 0.9;
@@ -24,8 +24,8 @@ double fitness[POP_SIZE];
 int parents[2][GENE];
 int children[2][GENE];
 //declare new data structure to hold new chromosomes
-int newChromosome[POP_SIZE][GENE];
-int newChromosomeCounter = 0;
+int newChromosomes[POP_SIZE][GENE];
+int newChromosomesCounter = 0;
 
 double bestFitness = 9.9;
 double avgFitness = 0.0;
@@ -344,7 +344,7 @@ void survivalSelection() {
 		}
 	}
 
-	for (int c = 0; c < POP_SIZE; c++) {
+/* 	for (int c = 0; c < POP_SIZE; c++) {
 		if (fitness[c] <= tempWorstFitness) {
 			tempWorstFitness = fitness[c];
 			worstChromosomeIndex[0] = c;
@@ -358,26 +358,39 @@ void survivalSelection() {
 			tempWorstFitness = fitness[c];
 			worstChromosomeIndex[1] = c;
 		}
-	}
+	} */
 
-	for (int i = 0; i < 2; i++) {
+/* 	for (int i = 0; i < 2; i++) {
 		for (int g = 0; g < GENE; g++) {
 			chromosome[worstChromosomeIndex[i]][g] = candidates[bestCandidateIndex[i]][g];
 		}
 		cout << "Replaced chromosome " << worstChromosomeIndex[i] << " with candidate " << bestCandidateIndex[i] << endl;
+	} */
+	for (int c = 0; c < 2; c++) {
+		for (int g = 0; g < GENE; g++) {
+			newChromosomes[newChromosomesCounter][g] = candidates[bestCandidateIndex[c]][g];
+		}
+		newChromosomesCounter++;
+		cout << "Added new chromosome, counter: " <<newChromosomesCounter<< endl;
 	}
+	for (int p = 0; p < newChromosomesCounter; p++) {
+		cout << "\n\t new Chromosomes " << p + 1 << ": ";
+		for (int g = 0; g < GENE; g++) {
+			cout << newChromosomes[p][g] << " ";
+		}
+	}
+	cout<<endl;
 }
 
-//void copyChromosome() {
-//	for (int c = 0; c < POP_SIZE; c++)
-//	{
-//		for (int g = 0; g < GENE; g++)
-//		{
-//			newChromosome[c][g] = chromosome[c][g];
-//			chromosome[c][g] = newChromosome[c][g];
-//		}
-//	}
-//}
+void copyChromosome() {
+	for (int c = 0; c < POP_SIZE; c++)
+	{
+		for (int g = 0; g < GENE; g++)
+		{
+			chromosome[c][g] = newChromosomes[c][g];
+		}
+	}
+}
 
 void recordBestFitness() {
 	int bestChromosomeIndex;
@@ -461,10 +474,11 @@ int main() {
 
 			cout << "\nSURVIVAL SELECTION\n";
 			survivalSelection();
-			printChromosome();
 		}
-
+		copyChromosome();
+		printChromosome();
 	}
+	
 
 	cout << "\nGA END! \n";
 
