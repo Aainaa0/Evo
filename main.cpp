@@ -8,7 +8,6 @@ using namespace std;
 
 //declare constant - problem specification, population size
 const int GENE = 30;
-const int CAPACITY = 104;
 const int POP_SIZE = 50;   //temporary
 const int PRICE[GENE] = { 8, 5, 6, 4, 13, 12, 5, 17, 10, 15, 9, 4, 6, 18, 8, 7, 7, 8, 8, 2, 9, 10, 10, 13, 7, 11, 12, 6, 21, 7 };
 const int TIME[GENE] = { 12, 11, 13, 9, 14, 14, 12, 20, 6, 21, 13, 9, 11, 15, 11, 9, 6, 7, 14, 6, 13, 8, 13, 16, 10, 10, 11, 10, 20, 10 };
@@ -229,6 +228,11 @@ void crossover() {
 		}
 	}
 	else {
+		for (int g = 0; g < GENE; g++)
+		{
+				children[0][g] = parents[0][g];
+				children[1][g] = parents[1][g];
+		}
 		cout << "\nCrossover did not happen ";
 	}
 
