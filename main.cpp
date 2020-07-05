@@ -27,7 +27,7 @@ int children[2][GENE];
 int newChromosomes[POP_SIZE][GENE];
 int newChromosomesCounter = 0;
 
-double bestFitness = 9.9;
+double bestFitness = 0;
 double avgFitness = 0.0;
 int bestChromosome[GENE];
 
@@ -394,8 +394,9 @@ void copyChromosome() {
 
 void recordBestFitness() {
 	int bestChromosomeIndex;
+
 	for (int c = 0; c < POP_SIZE; c++) {
-		if (bestFitness > fitness[c]) {
+		if (fitness[c]>bestFitness) {
 			bestFitness = fitness[c];
 
 			for (int g = 0; g < GENE; g++) {
