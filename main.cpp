@@ -306,8 +306,8 @@ void survivalSelection() {
 	float tempFitness[4];
 	float tempBestFitness = 0;
 	int bestCandidateIndex[2];
-	int worstChromosomeIndex[2];
-	float tempWorstFitness = 100;
+/* 	int worstChromosomeIndex[2];
+	float tempWorstFitness = 100; */
 
 	for (int c = 0; c < 4; c++) {
 		accumulatedTime = 0;
@@ -477,8 +477,8 @@ int main() {
 		}
 		copyChromosome();
 		printChromosome();
+		newChromosomesCounter=0;
 	}
-	
 
 	cout << "\nGA END! \n";
 
