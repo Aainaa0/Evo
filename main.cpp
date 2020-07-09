@@ -12,10 +12,12 @@ const int POP_SIZE = 50;   //temporary
 const int PRICE[GENE] = { 8, 5, 6, 4, 13, 12, 5, 17, 10, 15, 9, 4, 6, 18, 8, 7, 7, 8, 8, 2, 9, 10, 10, 13, 7, 11, 12, 6, 21, 7 };
 const int TIME[GENE] = { 12, 11, 13, 9, 14, 14, 12, 20, 6, 21, 13, 9, 11, 15, 11, 9, 6, 7, 14, 6, 13, 8, 13, 16, 10, 10, 11, 10, 20, 10 };
 const float CO_probability = 0.9;
-const float MUT_probability = 0.9;
+const float MUT_probability = 0.1;
 const int MAX_GENERATION = 10;
 const int MAX_PRICE = 278;
-const int MAX_TIME = 120;
+const int MAX_TIME = 280;
+const double TIME_WEIGHTAGE=0.5;
+const double PRICE_WEIGHTAGE=0.5;
 const double PENALTY_MULTIPLIER = 0.01;
 //declare chromosomes data structure
 int chromosome[POP_SIZE][GENE];
@@ -71,12 +73,7 @@ void evaluateChromosome() {
 			}
 		}
 
-		if (accumulatedTime <= MAX_TIME) {
-			fitness[c] = accumulatedPrice / (float)MAX_PRICE;
-		}
-		else {
-			fitness[c] = accumulatedPrice / (float)MAX_PRICE * PENALTY_MULTIPLIER;
-		}
+		fitness[c] = (((double)accumulatedPrice / MAX_PRICE)*PRICE_WEIGHTAGE)+((1/((double)abs(accumulatedTime-MAX_TIME)+1))*TIME_WEIGHTAGE);
 
 		cout << "\tC" << c << "\t" << accumulatedPrice << "\t" << accumulatedTime << "\t" << fitness[c] << endl;
 	}
@@ -111,7 +108,7 @@ void parentSelection() {
 
 		for (int c = 0; c < POP_SIZE; c++) {
 			temp += fitness[c];
-			//cout <<c<<" " << temp << endl;
+			cout <<c<<" " << temp << endl;
 
 			if (p1 == 1 && p2 == 1) 
 			{
@@ -233,17 +230,17 @@ void crossover() {
 				children[0][g] = parents[0][g];
 				children[1][g] = parents[1][g];
 		}
-		cout << "\nCrossover did not happen ";
+		/* cout << "\nCrossover did not happen "; */
 	}
 
-	for (int c = 0; c < 2; c++)
+	/* for (int c = 0; c < 2; c++)
 	{
 		cout << "\nChildren" << c + 1 << ": ";
 		for (int g = 0; g < GENE; g++)
 		{
 			cout << children[c][g] << " ";
 		}
-	}
+	} */
 }
 
 void mutation() {
