@@ -47,13 +47,13 @@ void initializePopulation() {
 }
 
 void printChromosome() {
-	for (int c = 0; c < POP_SIZE; c++) {
+	/*for (int c = 0; c < POP_SIZE; c++) {
 		cout << "\tC" << c << "\t";
 		for (int i = 0; i < GENE; i++) {
 			cout << chromosome[c][i] << " ";
 		}
 		cout << endl;
-	}
+	}*/
 }
 
 void evaluateChromosome() {
@@ -108,7 +108,7 @@ void parentSelection() {
 
 		for (int c = 0; c < POP_SIZE; c++) {
 			temp += fitness[c];
-			cout <<c<<" " << temp << endl;
+			//cout <<c<<" " << temp << endl;
 
 			if (p1 == 1 && p2 == 1)
 			{
@@ -138,13 +138,13 @@ void parentSelection() {
 
 	for (int p = 0; p < 2; p++)
 	{
-		cout << "Parent " << p + 1 << ": ";
+		//cout << "Parent " << p + 1 << ": ";
 		for (int g = 0; g < GENE; g++)
 		{
 			parents[p][g] = chromosome[indexParents[p]][g];
-			cout << " " << parents[p][g];
+			//cout << " " << parents[p][g];
 		}
-		cout << " Fitness= " << fitness[indexParents[p]] << endl;
+		//cout << " Fitness= " << fitness[indexParents[p]] << endl;
 	}
 
 	/*
@@ -245,7 +245,7 @@ void mutation() {
 	{
 		if (prob < MUT_probability) {
 			mut_point = rand() % GENE;
-			cout << "\nMutation happened for Children " << c + 1 << " at mutation point " << mut_point;
+			//cout << "\nMutation happened for Children " << c + 1 << " at mutation point " << mut_point;
 			if (children[c][mut_point] == 0) {
 				children[c][mut_point] = 1;
 			}
@@ -254,11 +254,11 @@ void mutation() {
 			}
 		}
 		else {
-			cout << "\nMutation did not happen for Children " << c + 1;
+			//cout << "\nMutation did not happen for Children " << c + 1;
 		}
 	}
 
-	for (int c = 0; c < 2; c++)
+	/* for (int c = 0; c < 2; c++)
 	{
 		cout << "\nChildren" << c + 1 << ": ";
 		for (int g = 0; g < GENE; g++)
@@ -267,7 +267,7 @@ void mutation() {
 		}
 
 	}
-	cout << endl;
+	cout << endl; */
 }
 
 void survivalSelection() {
@@ -276,16 +276,16 @@ void survivalSelection() {
 			newChromosomes[newChromosomesCounter][g] = children[c][g];
 		}
 		newChromosomesCounter++;
-		cout << "Added new chromosome, counter: " <<newChromosomesCounter<< endl;
+		//cout << "Added new chromosome, counter: " <<newChromosomesCounter<< endl;
 	}
-	
-	for (int p = 0; p < newChromosomesCounter; p++) {
+
+	/* for (int p = 0; p < newChromosomesCounter; p++) {
 		cout << "\n\t new Chromosomes " << p + 1 << ": ";
 		for (int g = 0; g < GENE; g++) {
 			cout << newChromosomes[p][g] << " ";
 		}
-	}
-	cout << endl;
+	} 
+	cout << endl;*/
 }
 
 void copyChromosome() {
@@ -332,7 +332,7 @@ void calcAvgFitness() {
 		sum += fitness[c]; //sum=sum+fitness
 	}
 	avgFitness = sum / POP_SIZE;
-	cout << "\n Average Fitness = " << avgFitness;
+	cout << "\n Average Fitness = " << avgFitness<<endl;
 
 	avgFitnessFile << avgFitness << endl;
 }
@@ -360,26 +360,26 @@ int main() {
 	{
 		cout << "GENERATION " << g + 1 << endl;
 
-		cout << "\nPRINT POPULATION \n";
+		//cout << "\nPRINT POPULATION \n";
 		printChromosome();
 
-		cout << "\nEVALUATE CHROMOSOME \n";
+		//cout << "\nEVALUATE CHROMOSOME \n";
 		evaluateChromosome();
 		recordBestFitness();
 		calcAvgFitness();
 
 		for (int i = 0; i < POP_SIZE / 2; i++)
 		{
-			cout << "\nPARENT SELECTION \n";
+			//cout << "\nPARENT SELECTION \n";
 			parentSelection();
 
-			cout << "\nCROSSOVER \n";
+			//cout << "\nCROSSOVER \n";
 			crossover();
 
-			cout << "\nMUTATION \n";
+			//cout << "\nMUTATION \n";
 			mutation();
 
-			cout << "\nSURVIVAL SELECTION\n";
+			//cout << "\nSURVIVAL SELECTION\n";
 			survivalSelection();
 		}
 		copyChromosome();
