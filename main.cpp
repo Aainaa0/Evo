@@ -271,95 +271,14 @@ void mutation() {
 }
 
 void survivalSelection() {
-	int candidates[4][GENE];
-	int j = 0;
-
-	for (int i = 0; i < 4; i++) {
-		if (i < 2) {
-			for (int g = 0; g < GENE; g++)
-			{
-				candidates[i][g] = parents[i][g];
-			}
-		}
-		else {
-			for (int g = 0; g < GENE; g++)
-			{
-				candidates[i][g] = children[j][g];
-			}
-			j++;
-		}
-	}
-
-	int accumulatedTime = 0;
-	int accumulatedPrice = 0;
-	float tempFitness[4];
-	float tempBestFitness = 0;
-	int bestCandidateIndex[2];
-	/* 	int worstChromosomeIndex[2];
-		float tempWorstFitness = 100; */
-
-	for (int c = 0; c < 4; c++) {
-		accumulatedTime = 0;
-		accumulatedPrice = 0;
-
-		for (int i = 0; i < GENE; i++) {
-			if (candidates[c][i] == 1) {
-				accumulatedTime += TIME[i];
-				accumulatedPrice += PRICE[i];
-			}
-		}
-
-		if (accumulatedTime <= MAX_TIME) {
-			tempFitness[c] = accumulatedPrice / (float)MAX_PRICE;
-		}
-		else {
-			tempFitness[c] = accumulatedPrice / (float)MAX_PRICE * PENALTY_MULTIPLIER;
-		}
-	}
-
-	for (int c = 0; c < 4; c++) {
-		if (tempFitness[c] >= tempBestFitness) {
-			tempBestFitness = tempFitness[c];
-			bestCandidateIndex[0] = c;
-		}
-	}
-
-	tempBestFitness = 0;
-
-	for (int c = 0; c < 4; c++) {
-		if (tempFitness[c] >= tempBestFitness && c != bestCandidateIndex[0]) {
-			tempBestFitness = tempFitness[c];
-			bestCandidateIndex[1] = c;
-		}
-	}
-
-	/* 	for (int c = 0; c < POP_SIZE; c++) {
-			if (fitness[c] <= tempWorstFitness) {
-				tempWorstFitness = fitness[c];
-				worstChromosomeIndex[0] = c;
-			}
-		}
-		tempWorstFitness = 100;
-		for (int c = 0; c < POP_SIZE; c++) {
-			if (fitness[c] <= tempWorstFitness && c != worstChromosomeIndex[0]) {
-				tempWorstFitness = fitness[c];
-				worstChromosomeIndex[1] = c;
-			}
-		} */
-
-		/* 	for (int i = 0; i < 2; i++) {
-				for (int g = 0; g < GENE; g++) {
-					chromosome[worstChromosomeIndex[i]][g] = candidates[bestCandidateIndex[i]][g];
-				}
-				cout << "Replaced chromosome " << worstChromosomeIndex[i] << " with candidate " << bestCandidateIndex[i] << endl;
-			} */
 	for (int c = 0; c < 2; c++) {
 		for (int g = 0; g < GENE; g++) {
-			newChromosomes[newChromosomesCounter][g] = candidates[bestCandidateIndex[c]][g];
+			newChromosomes[newChromosomesCounter][g] = children[c][g];
 		}
 		newChromosomesCounter++;
-		cout << "Added new chromosome, counter: " << newChromosomesCounter << endl;
+		cout << "Added new chromosome, counter: " <<newChromosomesCounter<< endl;
 	}
+	
 	for (int p = 0; p < newChromosomesCounter; p++) {
 		cout << "\n\t new Chromosomes " << p + 1 << ": ";
 		for (int g = 0; g < GENE; g++) {
