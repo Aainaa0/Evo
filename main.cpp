@@ -8,6 +8,8 @@ using namespace std;
 
 //declare constant - problem specification, population size
 const int GENE = 30;
+const int GENERATION=50;
+const int RUN_NO=30;
 const int POP_SIZE = 50;   //temporary
 const int PRICE[GENE] = { 8, 5, 6, 4, 13, 12, 5, 17, 10, 15, 9, 4, 6, 18, 8, 7, 7, 8, 8, 2, 9, 10, 10, 13, 7, 11, 12, 6, 21, 7 };
 const int TIME[GENE] = { 12, 11, 13, 9, 14, 14, 12, 20, 6, 21, 13, 9, 11, 15, 11, 9, 6, 7, 14, 6, 13, 8, 13, 16, 10, 10, 11, 10, 20, 10 };
@@ -399,13 +401,6 @@ void recordBestFitness() {
 		cout << bestChromosome[g] << " ";
 	}
 	cout << endl;
-
-
-	bestFitnessFile << bestFitness << endl;
-	for (int g = 0; g < GENE; g++) {
-		bestChromosomeFile << bestChromosome[g] << " ";
-	}
-	bestChromosomeFile << endl;
 }
 
 void calcAvgFitness() {
@@ -426,51 +421,44 @@ int main() {
 	avgFitnessFile.open("avgFitness.txt");
 	bestChromosomeFile.open("bestChromosome.txt");
 
-	int N;
+	for (int i=0;i<RUN_NO;i++){
+		cout << "\nGA START! \n";
+		cout << "First generation \n\n";
+		cout << "\nINITIALIZATION... \n";
 
-	cout << "\nENTER NUMBER OF GENERATION: ";
-	cin >> N;
+		initializePopulation();
+		for (int g = 0; g < GENERATION; g++){
+			cout << "GENERATION " << g + 1 << endl;
 
+			//cout << "\nPRINT POPULATION \n";
+			printChromosome();
 
-	cout << "\nGA START! \n";
-	cout << "First generation \n\n";
-	cout << "\nINITIALIZATION... \n";
+			//cout << "\nEVALUATE CHROMOSOME \n";
+			evaluateChromosome();
+			recordBestFitness();
 
-	initializePopulation();
+			for (int i = 0; i < POP_SIZE / 2; i++)
+			{
+				//cout << "\nPARENT SELECTION \n";
+				parentSelection();
 
-	for (int g = 0; g < N; g++)
-	{
-		cout << "GENERATION " << g + 1 << endl;
+				//cout << "\nCROSSOVER \n";
+				crossover();
 
-		//cout << "\nPRINT POPULATION \n";
-		printChromosome();
+				//cout << "\nMUTATION \n";
+				mutation();
 
-		//cout << "\nEVALUATE CHROMOSOME \n";
-		evaluateChromosome();
-		recordBestFitness();
-		calcAvgFitness();
-
-		for (int i = 0; i < POP_SIZE / 2; i++)
-		{
-			//cout << "\nPARENT SELECTION \n";
-			parentSelection();
-
-			//cout << "\nCROSSOVER \n";
-			crossover();
-
-			//cout << "\nMUTATION \n";
-			mutation();
-
-			//cout << "\nSURVIVAL SELECTION\n";
-			survivalSelection();
+				//cout << "\nSURVIVAL SELECTION\n";
+				survivalSelection();
+			}
+			copyChromosome();
+			printChromosome();
+			newChromosomesCounter = 0;
 		}
-		copyChromosome();
-		printChromosome();
-		newChromosomesCounter = 0;
+		bestFitnessFile << bestFitness << endl;
+		bestFitness=0;
+		cout << "\nGA END! \n";
 	}
-
-	cout << "\nGA END! \n";
-
 	bestFitnessFile.close();
 	avgFitnessFile.close();
 	bestChromosomeFile.close();
